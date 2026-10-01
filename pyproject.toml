@@ -1,0 +1,16 @@
+[project]
+name = "ComfyUI-Depth-Anything-3"
+description = "An all-in-one, ultra-fast ComfyUI custom node for Depth Anything 3 (DA3)."
+version = "1.0.0"
+license = {file = "LICENSE"}
+
+dependencies = ["huggingface-hub", "matplotlib"]
+    
+[project.urls]
+Repository = "https://github.com/1038lab/ComfyUI-Depth-Anything-3"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = "ailab"
+DisplayName = "ComfyUI-RMBG"
+Icon = ""
