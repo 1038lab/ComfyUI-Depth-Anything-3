@@ -19,7 +19,7 @@ Generating coherent video with AI models (e.g. Wan 2.1, CogVideoX, SVD) often su
 * **Lost edge boundaries**: Thin structures like hair, fingers, branches, and poles blend into the background.
 
 ### The Solution: Accurate Depth Maps as 3D Structural Anchors
-By passing video frames through this node, you obtain a temporally consistent, high-contrast **Depth Video Sequence (黑白深度视频)**:
+By passing video frames through this node, you obtain a temporally consistent, high-contrast **Depth Video Sequence**:
 1. **Precise 3D Geometry**: Locks down object bounds, character silhouettes, and true depth planes.
 2. **Rock-Solid Camera Motion**: Provides rigid geometric conditioning for Depth-to-Video models, eliminating background warping.
 3. **Streamlined One-Node Experience**: No need to chain separate loaders, preprocessors, and renderers. Plug your video in, select a model, and get your depth stream ready for generation!
