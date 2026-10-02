@@ -1,0 +1,32 @@
+{
+  "DepthAnything3": {
+    "title": "Depth Anything 3",
+    "inputs": {
+      "images": "Images",
+      "model": "Model",
+      "resolution": "Resolution",
+      "normalization": "Normalization",
+      "colormap": "Colormap",
+      "unload_model": "Unload Model",
+      "weight_dtype": "Precision"
+    },
+    "widgets": {
+      "normalization": {
+        "min_max": "Min-Max (0-1 Normalized)",
+        "v2_style": "V2 Style (Sky Clipped)",
+        "raw": "Raw (Unscaled Metric)"
+      },
+      "colormap": {
+        "gray": "Grayscale (Standard)",
+        "inferno": "Inferno (Thermal)",
+        "turbo": "Turbo (Rainbow)"
+      },
+      "weight_dtype": {
+        "default": "Default (Native)",
+        "fp16": "FP16 (Half Precision)",
+        "bf16": "BF16 (Bfloat16)",
+        "fp32": "FP32 (Full Precision)"
+      }
+    }
+  }
+}
