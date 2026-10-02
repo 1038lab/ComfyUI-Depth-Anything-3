@@ -1,0 +1,58 @@
+{
+  "DepthAnything3": {
+    "display_name": "Depth Anything 3",
+    "description": "An all-in-one, ultra-fast ComfyUI custom node for Depth Anything 3 (DA3).",
+    "inputs": {
+      "images": {
+        "name": "Images",
+        "tooltip": "Input video frames or single image. Connect from Load Video (e.g. VHS Video Helper Suite) or Load Image."
+      },
+      "model": {
+        "name": "Model",
+        "tooltip": "Depth Anything 3 model weight (auto-downloads if missing)"
+      },
+      "resolution": {
+        "name": "Resolution",
+        "tooltip": "Model internal processing resolution (longest side, multiple of 14)"
+      },
+      "normalization": {
+        "name": "Normalization",
+        "tooltip": "Depth range normalization mode",
+        "options": {
+          "min_max": "Min-Max (0-1 Normalized)",
+          "v2_style": "V2 Style (Sky Clipped)",
+          "raw": "Raw (Unscaled Depth)"
+        }
+      },
+      "colormap": {
+        "name": "Colormap",
+        "tooltip": "Output color format",
+        "options": {
+          "gray": "Grayscale",
+          "inferno": "Inferno (Thermal)",
+          "turbo": "Turbo (Rainbow)"
+        }
+      },
+      "unload_model": {
+        "name": "Unload Model",
+        "tooltip": "Unload model from VRAM immediately after execution to free GPU memory"
+      },
+      "weight_dtype": {
+        "name": "Computation Precision",
+        "tooltip": "Computation precision (FP16 recommended for Nvidia GPUs)",
+        "options": {
+          "default": "Default",
+          "fp16": "FP16 (Recommended)",
+          "bf16": "BF16",
+          "fp32": "FP32"
+        }
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "IMAGE",
+        "tooltip": "Output depth map image tensor"
+      }
+    }
+  }
+}

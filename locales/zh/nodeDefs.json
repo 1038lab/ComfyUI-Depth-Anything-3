@@ -1,0 +1,58 @@
+{
+  "DepthAnything3": {
+    "display_name": "Depth Anything 3 深度估算",
+    "description": "一体化超快 Depth Anything 3 (DA3) 深度估算节点",
+    "inputs": {
+      "images": {
+        "name": "图像输入",
+        "tooltip": "输入视频帧或单张图像。可连接 Load Video (如 VHS 视频套件) 或 Load Image"
+      },
+      "model": {
+        "name": "模型选择",
+        "tooltip": "Depth Anything 3 模型权重（若本地不存在将自动从 Hugging Face 下载）"
+      },
+      "resolution": {
+        "name": "处理分辨率",
+        "tooltip": "模型内部处理分辨率（最长边，需为 14 的倍数）"
+      },
+      "normalization": {
+        "name": "归一化模式",
+        "tooltip": "深度范围归一化模式",
+        "options": {
+          "min_max": "Min-Max (0-1 归一化)",
+          "v2_style": "V2 风格 (自动裁切天空)",
+          "raw": "Raw (原始非缩放数值)"
+        }
+      },
+      "colormap": {
+        "name": "色彩映射 (Colormap)",
+        "tooltip": "输出颜色格式",
+        "options": {
+          "gray": "灰度深度图 (标准格式)",
+          "inferno": "Inferno (高对比热力图)",
+          "turbo": "Turbo (彩虹渐变图)"
+        }
+      },
+      "unload_model": {
+        "name": "运行后卸载模型",
+        "tooltip": "执行后立即从显存中卸载模型，为下游视频生成模型释放最大 GPU 空间"
+      },
+      "weight_dtype": {
+        "name": "计算精度",
+        "tooltip": "计算精度（Nvidia 显卡推荐使用 FP16）",
+        "options": {
+          "default": "默认 (模型原生)",
+          "fp16": "FP16 (半精度 - 推荐)",
+          "bf16": "BF16 (Bfloat16)",
+          "fp32": "FP32 (全精度)"
+        }
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "图像输出",
+        "tooltip": "输出深度图图像张量"
+      }
+    }
+  }
+}
