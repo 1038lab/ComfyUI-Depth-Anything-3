@@ -1,7 +1,6 @@
 import os
 import gc
 import torch
-import numpy as np
 import folder_paths
 import comfy.sd
 import comfy.model_management as mm
@@ -75,6 +74,33 @@ def ensure_model(model_name: str) -> str:
             return downloaded
 
     return target_path
+
+
+_INFERNO_ANCHORS = [
+    (0.001462, 0.000466, 0.013866),
+    (0.087411, 0.044556, 0.224813),
+    (0.258234, 0.038571, 0.406485),
+    (0.441788, 0.081108, 0.428009),
+    (0.626270, 0.154454, 0.357919),
+    (0.798216, 0.280197, 0.243538),
+    (0.928329, 0.472975, 0.086005),
+    (0.983058, 0.697444, 0.089408),
+    (0.965416, 0.915014, 0.354746),
+    (0.988362, 0.998364, 0.644924),
+]
+
+
+def _build_inferno_lut(n: int = 256) -> torch.Tensor:
+    anchors = torch.tensor(_INFERNO_ANCHORS, dtype=torch.float32)
+    xs = torch.linspace(0.0, 1.0, n)
+    seg = len(_INFERNO_ANCHORS) - 1
+    pos = xs * seg
+    lo = pos.floor().clamp(0, seg - 1).long()
+    frac = (pos - lo).unsqueeze(-1)
+    return anchors[lo] * (1 - frac) + anchors[lo + 1] * frac
+
+
+_INFERNO_LUT = _build_inferno_lut(256)
 
 
 class DepthAnything3:
@@ -168,7 +194,7 @@ class DepthAnything3:
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("IMAGE",)
     FUNCTION = "process"
-    CATEGORY = "🧪AILab/🧽RMBG"
+    CATEGORY = "🧪AILab/Geometry"
 
     def process(self, images, model, resolution, normalization, colormap, unload_model, weight_dtype):
         model_path = ensure_model(model)
@@ -237,14 +263,20 @@ class DepthAnything3:
         if colormap == "turbo":
             output = _turbo(norm.clamp(0.0, 1.0))
         elif colormap == "inferno":
-            import matplotlib
-            cmap = matplotlib.colormaps["inferno"]
-            depth_np = norm.clamp(0.0, 1.0).numpy()
-            colored = cmap(depth_np)[..., :3]
-            output = torch.from_numpy(colored).float()
+            lut = _INFERNO_LUT.to(norm.device)
+            idx = (norm.clamp(0.0, 1.0) * 255.0).round().clamp(0, 255).long()
+            output = lut[idx]
         else:
             if normalization != "raw":
                 norm = norm.clamp(0.0, 1.0)
             output = norm.unsqueeze(-1).repeat(1, 1, 1, 3)
 
         return (output.contiguous().float(),)
+
+NODE_CLASS_MAPPINGS = {
+    "DepthAnything3": DepthAnything3,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "DepthAnything3": "Depth Anything 3",
+}

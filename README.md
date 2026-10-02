@@ -7,11 +7,24 @@
   <img src="https://img.shields.io/badge/HuggingFace-Models-yellow?style=for-the-badge&logo=huggingface" alt="HuggingFace">
 </p>
 
+**English** | [中文](README_zh.md)
+
 An all-in-one, ultra-fast ComfyUI custom node for **Depth Anything 3 (DA3)** by ByteDance Seed. Designed specifically for generating temporally stable, geometrically accurate **Depth Video Sequences** and single-frame depth maps to guide modern **AI Video Generation** pipelines (such as Wan 2.1, CogVideoX, HunyuanVideo, Stable Video Diffusion, and ControlNet Depth).
+
+![ComfyUI-Depth-Anything-3](example_workflows/DA3_depthmap.jpg)
+---
+
+## News & Updates
+- **2026/10/02**: Initial Official Release of ComfyUI-Depth-Anything-3 **v1.0.0** ( [update.md](update.md#v100-20261002) )
+  - **All-in-One DA3 Architecture**: Seamless support for `small`, `base`, `mono_large`, and `metric_large` models with automatic Hugging Face downloading.
+  - **Pure PyTorch Vectorized Colormap (Zero Matplotlib)**: GPU-native LUT eliminates CPU-GPU transfers and accelerates video batch rendering.
+  - **Temporal Consistency for Video**: High-contrast, geometrically stable depth sequence output designed to guide video diffusion models (Wan 2.1, CogVideoX, HunyuanVideo, SVD, and ControlNet Depth).
+  - **Ultra-Lean Dependencies**: Only requires `huggingface_hub` (pre-bundled in standard ComfyUI portable packages).
+  - **Optimized Memory Management**: Enhanced cache cleanup across CUDA and Apple Silicon (MPS) with safe model unloading (`unload_model`).
 
 ---
 
-## 🎯 Why This Node? Supercharging AI Video Generation
+## Why This Node? Supercharging AI Video Generation
 
 Generating coherent video with AI models (e.g. Wan 2.1, CogVideoX, SVD) often suffers from critical spatial issues:
 * **Structural morphing**: Limbs deform, faces melt, and objects shift unrealistically across frames.
@@ -24,9 +37,10 @@ By passing video frames through this node, you obtain a temporally consistent, h
 2. **Rock-Solid Camera Motion**: Provides rigid geometric conditioning for Depth-to-Video models, eliminating background warping.
 3. **Streamlined One-Node Experience**: No need to chain separate loaders, preprocessors, and renderers. Plug your video in, select a model, and get your depth stream ready for generation!
 
+![ComfyUI-Depth-Anything-3](example_workflows/DA3_video_depth.jpg )
 ---
 
-## 📊 Model Comparison: Why Depth Anything 3?
+## Model Comparison: Why Depth Anything 3?
 
 Depth Anything 3 marks a fundamental paradigm shift from previous disparity-based depth models:
 
@@ -41,20 +55,20 @@ Depth Anything 3 marks a fundamental paradigm shift from previous disparity-base
 
 ---
 
-## 🏆 Model Zoo & Selection Guide
+## Model Zoo & Selection Guide
 
 All models are automatically downloaded on first run from [1038lab/Depth-Anything-3](https://huggingface.co/1038lab/Depth-Anything-3/tree/main) directly into `ComfyUI/models/geometry_estimation/`.
 
 | Model (`model`) | Parameters | VRAM Footprint | Inference Speed | Recommended Application |
 | :--- | :---: | :---: | :---: | :--- |
-| **`depth_anything_3_small.safetensors`** | **0.08B** | **~2.8 GB** | ⚡ **Ultra Fast** | Ideal for long video batches, real-time preview, and low-VRAM GPUs. |
-| **`depth_anything_3_base.safetensors`** | **0.12B** | **~3.6 GB** | 🚀 **Fast** | Best everyday balance of speed, low VRAM, and geometric fidelity. |
-| **`depth_anything_3_mono_large.safetensors`** | **0.35B** | **~5.5 GB** | 🌟 **Standard** | **Top Recommendation for Video Generation Guiding**: Maximum detail on silhouettes, complex textures, and facial features. |
-| **`depth_anything_3_metric_large.safetensors`** | **0.35B** | **~5.5 GB** | 📐 **Standard** | **True Real-World Metric Units (meters)**: Essential for 3D reconstruction, VFX compositing, and camera tracking. |
+| **`depth_anything_3_small.safetensors`** | **0.08B** | **~2.8 GB** | **Ultra Fast** | Ideal for long video batches, real-time preview, and low-VRAM GPUs. |
+| **`depth_anything_3_base.safetensors`** | **0.12B** | **~3.6 GB** | **Fast** | Best everyday balance of speed, low VRAM, and geometric fidelity. |
+| **`depth_anything_3_mono_large.safetensors`** | **0.35B** | **~5.5 GB** | **Standard** | **Top Recommendation for Video Generation Guiding**: Maximum detail on silhouettes, complex textures, and facial features. |
+| **`depth_anything_3_metric_large.safetensors`** | **0.35B** | **~5.5 GB** | **Standard** | **True Real-World Metric Units (meters)**: Essential for 3D reconstruction, VFX compositing, and camera tracking. |
 
 ---
 
-## ⚙️ Node Parameters Explained (Say Goodbye to Complex Jargon!)
+## Node Parameters Explained
 
 The node is built with simple, intuitive terms and built-in interactive tooltips for every parameter:
 
@@ -73,7 +87,7 @@ The node is built with simple, intuitive terms and built-in interactive tooltips
 
 ---
 
-## ⚡ Quick-Start Settings for Beginners
+## Quick-Start Settings for Beginners
 
 For the best results with **Video-to-Video** or **Depth-to-Video** generation:
 * **`model`**: `depth_anything_3_mono_large.safetensors` (for maximum detail) or `depth_anything_3_small.safetensors` (for fast iterations)
@@ -84,7 +98,7 @@ For the best results with **Video-to-Video** or **Depth-to-Video** generation:
 
 ---
 
-## 📦 Installation
+## Installation
 
 Clone this repository into your ComfyUI `custom_nodes` folder:
 
@@ -103,11 +117,11 @@ Restart ComfyUI and search for **`Depth Anything 3`** in your node menu.
 
 ---
 
-## 📁 Workflows
+## Workflows
 
-Ready-to-use ComfyUI workflow JSON files are available in the [`workflows/`](workflows/) directory:
-* `depth_video_basic.json`: Video loader ➔ Depth Anything 3 ➔ Video Combine.
-* `depth_guided_video_generation.json`: Depth Anything 3 combined with video diffusion models.
+Ready-to-use ComfyUI workflow JSON files are available in the [`example_workflows/`](example_workflows/) directory:
+* `DA3_depthmap.json`: Single image depth extraction and visualization workflow.
+* `DA3_video_depth.json`: High-contrast, temporally consistent video depth sequence extraction workflow for video diffusion models.
 
 ---
 
@@ -115,7 +129,7 @@ If this custom node helps you or you like my work, please give me ⭐ on this re
 
 ---
 
-## 📄 License & Acknowledgments
+## License & Acknowledgments
 
 * Depth Anything 3 architecture & weights developed by [ByteDance Seed](https://github.com/ByteDance-Seed/Depth-Anything-3).
 * Safetensors model checkpoints hosted by [1038lab](https://huggingface.co/1038lab/Depth-Anything-3).

@@ -4,7 +4,7 @@ description = "An all-in-one, ultra-fast ComfyUI custom node for Depth Anything 
 version = "1.0.0"
 license = {file = "LICENSE"}
 
-dependencies = ["huggingface-hub", "matplotlib"]
+dependencies = ["huggingface-hub"]
     
 [project.urls]
 Repository = "https://github.com/1038lab/ComfyUI-Depth-Anything-3"
@@ -12,5 +12,5 @@ Repository = "https://github.com/1038lab/ComfyUI-Depth-Anything-3"
 
 [tool.comfy]
 PublisherId = "ailab"
-DisplayName = "ComfyUI-RMBG"
+DisplayName = "ComfyUI-Depth-Anything-3"
 Icon = ""
