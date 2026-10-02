@@ -1,7 +1,3 @@
-"""
-1038lab ComfyUI Node Loader
-Automatically discovers, sorts, and registers nodes from current directory and py/
-"""
 from pathlib import Path
 import sys
 import importlib.util
@@ -9,12 +5,10 @@ import importlib.util
 __repo_name__ = "ComfyUI-Depth-Anything-3"
 __version__ = "1.0.0"
 
-# Locate directories and adaptively configure sys.path
 current_dir = Path(__file__).parent
 if str(current_dir) not in sys.path:
     sys.path.insert(0, str(current_dir))
 
-# Scan current directory, and adaptively include py/ only if it exists
 scan_dirs = [current_dir]
 nodes_dir = current_dir / "py"
 if nodes_dir.exists() and nodes_dir.is_dir():
@@ -22,21 +16,17 @@ if nodes_dir.exists() and nodes_dir.is_dir():
     if str(nodes_dir) not in sys.path:
         sys.path.insert(0, str(nodes_dir))
 
-# Initialize mappings
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
 WEB_DIRECTORY = "./web"
 
 
 def load_nodes():
-    """Automatically discover and load node definitions recursively across active directories."""
     models_dir = current_dir / "models"
-    
     for base in scan_dirs:
         for file in base.rglob("*.py"):
             if file.stem == "__init__":
                 continue
-            # Defensively skip model checkpoint folders
             try:
                 if file.is_relative_to(models_dir):
                     continue
@@ -60,10 +50,8 @@ def load_nodes():
                 print(f"[{__repo_name__}] Error loading module {file.name}: {e}")
 
 
-# Load all nodes
 load_nodes()
 
-# Alphabetically sort mappings by display name for a clean, consistent ComfyUI menu
 NODE_CLASS_MAPPINGS = dict(
     sorted(
         NODE_CLASS_MAPPINGS.items(),
@@ -76,7 +64,6 @@ NODE_DISPLAY_NAME_MAPPINGS = dict(
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
-# Formatted console branding on ComfyUI startup
 print(f'\033[36m[{__repo_name__}]\033[0m v'
       f'\033[93m{__version__}\033[0m | '
       f'\033[37m{len(NODE_CLASS_MAPPINGS)} nodes\033[0m '
