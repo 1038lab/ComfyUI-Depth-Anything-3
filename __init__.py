@@ -1,6 +1,10 @@
 import importlib.util
 import os
 import sys
+
+__repo_name__ = "ComfyUI-Depth-Anything-3"
+__version__ = "1.0.0"
+
 current_dir = os.path.dirname(__file__)
 sys.path.insert(0, current_dir)
 
@@ -54,3 +58,8 @@ NODE_DISPLAY_NAME_MAPPINGS = dict(sorted(
 ))
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY", "load_javascript"]
+
+print(f'\033[36m[{__repo_name__}]\033[0m v'
+      f'\033[93m{__version__}\033[0m | '
+      f'\033[37m{len(NODE_CLASS_MAPPINGS)} nodes\033[0m '
+      f'\033[92mLoaded\033[0m')
