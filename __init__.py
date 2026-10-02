@@ -9,14 +9,18 @@ import importlib.util
 __repo_name__ = "ComfyUI-Depth-Anything-3"
 __version__ = "1.0.0"
 
-# Locate current and node directories
+# Locate directories and adaptively configure sys.path
 current_dir = Path(__file__).parent
-nodes_dir = current_dir / "py"
+if str(current_dir) not in sys.path:
+    sys.path.insert(0, str(current_dir))
 
-# Add both current and nodes directories to sys.path
-for path in [current_dir, nodes_dir]:
-    if str(path) not in sys.path:
-        sys.path.insert(0, str(path))
+# Scan current directory, and adaptively include py/ only if it exists
+scan_dirs = [current_dir]
+nodes_dir = current_dir / "py"
+if nodes_dir.exists() and nodes_dir.is_dir():
+    scan_dirs.append(nodes_dir)
+    if str(nodes_dir) not in sys.path:
+        sys.path.insert(0, str(nodes_dir))
 
 # Initialize mappings
 NODE_CLASS_MAPPINGS = {}
@@ -25,12 +29,10 @@ WEB_DIRECTORY = "./web"
 
 
 def load_nodes():
-    """Automatically discover and load node definitions recursively."""
+    """Automatically discover and load node definitions recursively across active directories."""
     models_dir = current_dir / "models"
     
-    for base in (current_dir, nodes_dir):
-        if not base.exists():
-            continue
+    for base in scan_dirs:
         for file in base.rglob("*.py"):
             if file.stem == "__init__":
                 continue
